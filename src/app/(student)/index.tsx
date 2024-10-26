@@ -19,6 +19,7 @@ import { useAuth } from "@/src/providers/AuthProvider";
 import axios from "axios";
 import { fetchForms } from "@/src/api/fetchForms";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import CalendarComponent from "@/src/components/CalendarComponent";
 
 export default function Home() {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -147,6 +148,7 @@ export default function Home() {
   return (
     <GestureHandlerRootView>
       <View style={styles.container}>
+      {/* <CalendarComponent />  */}
         <BottomSheetModalProvider>
           {
             // Filter the forms for only pending ones

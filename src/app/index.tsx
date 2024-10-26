@@ -12,7 +12,7 @@ export default function InitialPage() {
         const role = await AsyncStorage.getItem('role'); 
         console.log("role: "+role);
         if (role === 'STUDENT') {
-          console.log("came hereeeeeeeeeee")
+          // console.log("came hereeeeeeeeeee")
           router.replace('/(student)'); 
         } else if (role === 'TEACHER') {
           router.replace('/(teacher)'); 

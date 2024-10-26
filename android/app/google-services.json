@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1085608004134",
+    "project_id": "expopushnotifications-5681d",
+    "storage_bucket": "expopushnotifications-5681d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1085608004134:android:499059e9cf44f75cf5b4e7",
+        "android_client_info": {
+          "package_name": "com.hprasath935.odapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfCiiY_XmmicUT_73bZcSPte7VW2yzdrA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

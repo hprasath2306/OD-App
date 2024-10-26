@@ -14,8 +14,10 @@ import {
 import { ActivityIndicator } from "react-native-paper";
 import { useAuth } from "@/src/providers/AuthProvider";
 import { fetchTeacherForms, acceptOrReject } from "@/src/api/fetchForms"; // Assume fetchForms has acceptOrReject API logic.
+import { usePushNotifications } from "@/src/utils/usePushNotifications";
 
 export default function Home() {
+  const { expoPushToken, notification } = usePushNotifications();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [isOpen, setIsOpen] = useState(false);
   const snapPoints = ["25%", "40%", "55%", "80%"];
@@ -24,6 +26,10 @@ export default function Home() {
   const [forms, setForms] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
   const userId: string = user?.user.id;
+
+  const data = JSON.stringify(notification, undefined, 2);
+
+  // console.log("Notification Data: ", expoPushToken?.data);
 
   const loadForms = async () => {
     try {
@@ -47,7 +53,11 @@ export default function Home() {
     setIsOpen(false);
   };
 
-  const handleAction = async (formId: string, requestId: string, status: "ACCEPTED" | "REJECTED") => {
+  const handleAction = async (
+    formId: string,
+    requestId: string,
+    status: "ACCEPTED" | "REJECTED"
+  ) => {
     try {
       setLoading(true);
       const updatedForm = await acceptOrReject({
@@ -73,7 +83,9 @@ export default function Home() {
   }, [userId]);
 
   const pendingForCurrentUser = forms?.filter((form) =>
-    form.requests.some((req: any) => req.requestedId === userId && req.status === "PENDING")
+    form.requests.some(
+      (req: any) => req.requestedId === userId && req.status === "PENDING"
+    )
   );
 
   if (loading) {
@@ -84,7 +96,11 @@ export default function Home() {
     <View style={styles.container}>
       <BottomSheetModalProvider>
         {pendingForCurrentUser.length === 0 ? (
-          <Text style={styles.noPendingText}>No Pending ODs</Text>
+          <>
+            {/* <Text style={styles.noPendingText}>Token: {expoPushToken?.data ?? " "}</Text> */}
+            {/* <Text style={styles.noPendingText}>{data}</Text> */}
+            <Text style={styles.noPendingText}>No Pending ODs</Text>
+          </>
         ) : (
           <FlatList
             data={pendingForCurrentUser.reverse()}
@@ -116,9 +132,15 @@ export default function Home() {
                       {statusText}
                     </Text>
                   </View>
-                  <Text style={styles.formText}>Name: {item.requester.name}</Text>
-                  <Text style={styles.formText}>Section: {item.requester.student.section}</Text>
-                  <Text style={styles.formText}>Year: {item.requester.student.year}</Text>
+                  <Text style={styles.formText}>
+                    Name: {item.requester.name}
+                  </Text>
+                  <Text style={styles.formText}>
+                    Section: {item.requester.student.section}
+                  </Text>
+                  <Text style={styles.formText}>
+                    Year: {item.requester.student.year}
+                  </Text>
                   <Text style={styles.formText}>Reason: {item.reason}</Text>
                   <Text style={styles.formText}>Category: {item.category}</Text>
                   <Text style={styles.formText}>
@@ -127,7 +149,9 @@ export default function Home() {
                   <Text style={styles.formText}>
                     Requested Dates:{" "}
                     {item.dates
-                      .map((date: string) => new Date(date).toLocaleDateString())
+                      .map((date: string) =>
+                        new Date(date).toLocaleDateString()
+                      )
                       .join(", ")}
                   </Text>
 
@@ -135,13 +159,25 @@ export default function Home() {
                   <View style={styles.actionButtons}>
                     <TouchableOpacity
                       style={[styles.actionButton, styles.acceptButton]}
-                      onPress={() => handleAction(item.requesterId, lastRequest.id, "ACCEPTED")}
+                      onPress={() =>
+                        handleAction(
+                          item.requesterId,
+                          lastRequest.id,
+                          "ACCEPTED"
+                        )
+                      }
                     >
                       <Text style={styles.buttonText}>Accept</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={[styles.actionButton, styles.rejectButton]}
-                      onPress={() => handleAction(item.requesterId, lastRequest.id, "REJECTED")}
+                      onPress={() =>
+                        handleAction(
+                          item.requesterId,
+                          lastRequest.id,
+                          "REJECTED"
+                        )
+                      }
                     >
                       <Text style={styles.buttonText}>Reject</Text>
                     </TouchableOpacity>
